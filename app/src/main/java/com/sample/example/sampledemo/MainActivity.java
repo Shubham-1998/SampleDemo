@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Toast.makeText(MainActivity.this, "Item have been loaded", Toast.LENGTH_SHORT).show();
+                //Progress bar can be stopped here.
+                //Toast.makeText(MainActivity.this, "Item have been loaded", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                         db.removeValue();
                         objectKeys.remove(0);
                         arrayList.remove(0);
-                        //remove key0 from database
                     }
                     adapter.setList(arrayList);
                     adapter.notifyDataSetChanged();
