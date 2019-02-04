@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SampleDemo</string>
+    <string name="name"><b>NAME:</b> %1$s</string>
+    <string name="age"><b>AGE:</b> %1$s</string>
+</resources>
