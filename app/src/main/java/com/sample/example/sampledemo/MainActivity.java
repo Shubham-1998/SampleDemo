@@ -8,17 +8,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         databaseReference.addValueEventListener(eventListener);
+
         FloatingActionButton fb = findViewById(R.id.add_button);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +80,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        getFirebaseMessage();
+
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        attachDatabaseListener();
-    }
 
     private void attachDatabaseListener() {
 
@@ -138,9 +140,18 @@ public class MainActivity extends AppCompatActivity {
         if(listener!=null)
         {
             databaseReference.removeEventListener(listener);
+            arrayList.clear();
+            adapter.setList(arrayList);
+            adapter.notifyDataSetChanged();
             listener = null;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        attachDatabaseListener();
     }
 
     @Override
@@ -165,5 +176,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getFirebaseMessage() {
+
+        FirebaseMessaging.getInstance().subscribeToTopic("USER")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String result = "success";
+                        if(!task.isSuccessful())
+                            result = "failed";
+
+                        Log.e("MainActivity", result);
+                    }
+                });
     }
 }
