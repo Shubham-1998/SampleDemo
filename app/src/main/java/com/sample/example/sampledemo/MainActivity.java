@@ -98,12 +98,6 @@ public class MainActivity extends AppCompatActivity {
                     arrayList.add(data);
                     objectKeys.add(key);
 
-                    if(arrayList.size()>10) {
-                        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("USER").child(objectKeys.get(0));
-                        db.removeValue();
-                        objectKeys.remove(0);
-                        arrayList.remove(0);
-                    }
                     adapter.setList(arrayList);
                     adapter.notifyDataSetChanged();
 
@@ -116,8 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        objectKeys.remove(0);
+                        arrayList.remove(0);
 
-
+                    adapter.setList(arrayList);
+                    adapter.notifyDataSetChanged();
                 }
 
                 @Override
